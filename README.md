@@ -14,9 +14,9 @@ Full-stack application for creating and viewing custom quizzes.
 
 ```text
 quiz-builder/
-├── backend/
-├── frontend/
-└── README.md
+|-- backend/
+|-- frontend/
+`-- README.md
 ```
 
 ## Local Setup

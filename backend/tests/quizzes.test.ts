@@ -91,8 +91,22 @@ describe("quiz API", () => {
     );
   });
 
-  it("deletes a quiz and its related questions", async () => {
-    const createResponse = await createBooleanQuiz("Temporary quiz");
+  it("deletes a quiz and all related records", async () => {
+    const createResponse = await request(app)
+      .post("/quizzes")
+      .send({
+        title: "Temporary quiz",
+        questions: [
+          {
+            type: "CHECKBOX",
+            text: "Select an answer.",
+            options: ["One", "Two"],
+            correctAnswers: ["One"],
+          },
+        ],
+      });
+
+    expect(await QuestionOption.count()).toBe(2);
 
     const deleteResponse = await request(app).delete(
       `/quizzes/${createResponse.body.id}`,
@@ -128,6 +142,28 @@ describe("quiz API", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Quiz not found." });
+  });
+
+  it("allows requests from the configured frontend origin", async () => {
+    const response = await request(app)
+      .options("/quizzes")
+      .set("Origin", "http://localhost:3000")
+      .set("Access-Control-Request-Method", "POST");
+
+    expect(response.status).toBe(204);
+    expect(response.headers["access-control-allow-origin"]).toBe(
+      "http://localhost:3000",
+    );
+  });
+
+  it("returns 400 for malformed JSON", async () => {
+    const response = await request(app)
+      .post("/quizzes")
+      .set("Content-Type", "application/json")
+      .send('{"title":');
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: "Invalid JSON payload." });
   });
 });
 

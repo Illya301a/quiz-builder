@@ -28,6 +28,15 @@ export const errorHandler: ErrorRequestHandler = (
     return;
   }
 
+  if (
+    error instanceof SyntaxError &&
+    "status" in error &&
+    error.status === 400
+  ) {
+    response.status(400).json({ message: "Invalid JSON payload." });
+    return;
+  }
+
   console.error(error);
   response.status(500).json({ message: "Internal server error." });
 };

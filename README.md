@@ -2,7 +2,7 @@
 
 Full-stack application for creating and viewing custom quizzes.
 
-The project is being implemented incrementally:
+The project contains:
 
 - `frontend` - Next.js client application
-- `backend` - Node.js API (will be added in a later step)
+- `backend` - Express API with Sequelize and SQLite

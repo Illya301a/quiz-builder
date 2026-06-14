@@ -7,13 +7,21 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
     throw new Error("NEXT_PUBLIC_API_URL is not configured.");
   }
 
-  const response = await fetch(`${apiUrl}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(`${apiUrl}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+      },
+    });
+  } catch {
+    throw new Error(
+      "The API is unavailable. Make sure the backend is running.",
+    );
+  }
 
   if (!response.ok) {
     const message = await readErrorMessage(response);

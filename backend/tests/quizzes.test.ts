@@ -1,3 +1,5 @@
+import { rm } from "node:fs/promises";
+import { resolve } from "node:path";
 import request from "supertest";
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { app } from "../src/app.js";
@@ -10,6 +12,7 @@ beforeEach(async () => {
 
 afterAll(async () => {
   await sequelize.close();
+  await rm(resolve(process.cwd(), "data/test.db"), { force: true });
 });
 
 describe("quiz API", () => {

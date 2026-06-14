@@ -4,6 +4,14 @@ Next.js client for the Quiz Builder application.
 
 ## Commands
 
+Create a local environment file before starting the app:
+
+```bash
+cp .env.example .env.local
+```
+
+Then install dependencies and start the development server:
+
 ```bash
 npm install
 npm run dev
